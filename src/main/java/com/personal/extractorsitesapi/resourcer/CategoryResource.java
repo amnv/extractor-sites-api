@@ -3,11 +3,12 @@ package com.personal.extractorsitesapi.resourcer;
 import com.personal.extractorsitesapi.model.Category;
 import com.personal.extractorsitesapi.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,12 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public String other() {
-        return "OK";
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody Category category, HttpServletResponse response) {
+        Category categorySaved = this.categoryRepository.save(category);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri().path("/{code}")
+                .buildAndExpand(categorySaved.getCode()).toUri();
+        response.setHeader("Location", uri.toASCIIString());
     }
 }
