@@ -24,6 +24,11 @@ public class CategoryResource {
         return this.categoryRepository.findAll();
     }
 
+    @GetMapping("/{code}")
+    public Category findByCode(@PathVariable Long code) {
+        return this.categoryRepository.findById(code).get();
+    }
+
     @PostMapping
     public ResponseEntity<Category> create(@RequestBody Category category, HttpServletResponse response) {
         Category categorySaved = this.categoryRepository.save(category);
