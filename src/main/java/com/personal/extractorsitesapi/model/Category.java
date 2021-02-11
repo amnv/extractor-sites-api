@@ -1,7 +1,8 @@
 package com.personal.extractorsitesapi.model;
 
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "category")
@@ -10,6 +11,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long code;
+
+    @NotNull
+    @Size(min = 3, max = 20)
     private String name;
 
     public Long getCode() {
