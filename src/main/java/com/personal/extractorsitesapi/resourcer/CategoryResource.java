@@ -1,8 +1,10 @@
 package com.personal.extractorsitesapi.resourcer;
 
+import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.Category;
 import com.personal.extractorsitesapi.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ public class CategoryResource {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @GetMapping
     public List<Category> listAll() {
         return this.categoryRepository.findAll();
@@ -33,11 +38,9 @@ public class CategoryResource {
     @PostMapping
     public ResponseEntity<Category> create(@Valid @RequestBody Category category, HttpServletResponse response) {
         Category categorySaved = this.categoryRepository.save(category);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri().path("/{code}")
-                .buildAndExpand(categorySaved.getCode()).toUri();
-        response.setHeader("Location", uri.toASCIIString());
 
-        return ResponseEntity.created(uri).body(categorySaved);
+        publisher.publishEvent(new ResourceBuildEvent(this, response, categorySaved.getCode()));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(categorySaved);
     }
 }

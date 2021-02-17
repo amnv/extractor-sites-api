@@ -1,15 +1,16 @@
 package com.personal.extractorsitesapi.resourcer;
 
+import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.Person;
 import com.personal.extractorsitesapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,15 +19,16 @@ public class PersonResource {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+
     @PostMapping
     public ResponseEntity<Person> create(@Valid @RequestBody Person person, HttpServletResponse response) {
         Person personCreated = this.personRepository.save(person);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri().path("/{code}")
-                .buildAndExpand(personCreated.getCode()).toUri();
-        response.setHeader("Location", uri.toASCIIString());
+        publisher.publishEvent(new ResourceBuildEvent(this, response, personCreated.getCode()));
 
-        return ResponseEntity.created(uri).body(personCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(personCreated);
     }
 
     @GetMapping
