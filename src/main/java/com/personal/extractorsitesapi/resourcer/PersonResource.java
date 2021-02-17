@@ -40,4 +40,10 @@ public class PersonResource {
     public Person read(@PathVariable Long code) {
         return this.personRepository.findById(code).get();
     }
+
+    @DeleteMapping("/{code}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long code) {
+        this.personRepository.deleteById(code);
+    }
 }
