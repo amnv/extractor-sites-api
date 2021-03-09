@@ -3,6 +3,7 @@ package com.personal.extractorsitesapi.resourcer;
 import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.Person;
 import com.personal.extractorsitesapi.repository.PersonRepository;
+import com.personal.extractorsitesapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class PersonResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    @Autowired
+    private PersonService personService;
 
     @PostMapping
     public ResponseEntity<Person> create(@Valid @RequestBody Person person, HttpServletResponse response) {
@@ -45,5 +48,11 @@ public class PersonResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long code) {
         this.personRepository.deleteById(code);
+    }
+
+    @PutMapping("/{code}")
+    public ResponseEntity<Person> update(@PathVariable Long code, @RequestBody @Valid Person person) {
+        Person personUpdated = this.personService.update(code, person);
+        return ResponseEntity.ok(personUpdated);
     }
 }
