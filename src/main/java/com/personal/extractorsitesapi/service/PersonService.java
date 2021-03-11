@@ -7,12 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PersonService {
     @Autowired
     private PersonRepository personRepository;
+
+    public Person create(Person person) {
+        return this.personRepository.save(person);
+    }
+    
+    public List<Person> findAll() {
+        return this.personRepository.findAll();
+    }
+
+    public Optional<Person> findById(Long code) {
+        return this.personRepository.findById(code);
+    }
 
     public Person update(Long code, Person newPersonData) {
         Optional<Person> personOptional = this.personRepository.findById(code);
@@ -24,11 +37,6 @@ public class PersonService {
 
         throw new EmptyResultDataAccessException(1);
     }
-
-    public Person get(Long code) {
-        return this.personRepository.findById(code).get();
-    }
-
 
     public void updateActive(Long code, Boolean active) {
         Optional<Person> personOptional = this.personRepository.findById(code);
@@ -43,4 +51,7 @@ public class PersonService {
     }
 
 
+    public void delete(Long code) {
+        this.personRepository.deleteById(code);
+    }
 }

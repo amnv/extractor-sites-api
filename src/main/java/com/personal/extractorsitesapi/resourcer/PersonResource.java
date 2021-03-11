@@ -18,8 +18,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/person")
 public class PersonResource {
-    @Autowired
-    private PersonRepository personRepository;
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -29,7 +27,7 @@ public class PersonResource {
 
     @PostMapping
     public ResponseEntity<Person> create(@Valid @RequestBody Person person, HttpServletResponse response) {
-        Person personCreated = this.personRepository.save(person);
+        Person personCreated = this.personService.create(person);
         publisher.publishEvent(new ResourceBuildEvent(this, response, personCreated.getCode()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(personCreated);
@@ -37,19 +35,13 @@ public class PersonResource {
 
     @GetMapping
     public List<Person> listAll() {
-        return this.personRepository.findAll();
+        return this.personService.findAll();
     }
 
     @GetMapping("/{code}")
     public ResponseEntity<Person> read(@PathVariable Long code) {
-        Optional<Person> personOptional = this.personRepository.findById(code);
+        Optional<Person> personOptional = this.personService.findById(code);
         return personOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{code}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long code) {
-        this.personRepository.deleteById(code);
     }
 
     @PutMapping("/{code}")
@@ -62,5 +54,11 @@ public class PersonResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateActive(@PathVariable Long code, @RequestBody Boolean active) {
         this.personService.updateActive(code, active);
+    }
+
+    @DeleteMapping("/{code}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long code) {
+        this.personService.delete(code);
     }
 }

@@ -4,8 +4,6 @@ import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import sun.applet.AppletEvent;
-import sun.applet.AppletListener;
 
 import java.net.URI;
 
