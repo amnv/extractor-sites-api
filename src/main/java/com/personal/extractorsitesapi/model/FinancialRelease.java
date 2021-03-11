@@ -10,8 +10,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "financial_release")
 @Getter @Setter @NoArgsConstructor
-public class Finance_releases {
+public class FinancialReleases {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
