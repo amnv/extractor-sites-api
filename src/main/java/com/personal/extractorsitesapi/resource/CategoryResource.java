@@ -1,4 +1,4 @@
-package com.personal.extractorsitesapi.resourcer;
+package com.personal.extractorsitesapi.resource;
 
 import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.Category;

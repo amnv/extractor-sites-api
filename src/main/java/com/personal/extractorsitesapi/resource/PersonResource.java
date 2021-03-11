@@ -1,8 +1,7 @@
-package com.personal.extractorsitesapi.resourcer;
+package com.personal.extractorsitesapi.resource;
 
 import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.Person;
-import com.personal.extractorsitesapi.repository.PersonRepository;
 import com.personal.extractorsitesapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

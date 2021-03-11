@@ -15,6 +15,10 @@ public class FinancialReleaseService {
     @Autowired
     private FinancialReleaseRepository financialReleaseRepository;
 
+    public FinancialRelease create(FinancialRelease financialRelease) {
+        return this.financialReleaseRepository.save(financialRelease);
+    }
+
     public List<FinancialRelease> findAll() {
         return this.financialReleaseRepository.findAll();
     }
@@ -25,4 +29,5 @@ public class FinancialReleaseService {
 
         throw new EmptyResultDataAccessException(1);
     }
+
 }
