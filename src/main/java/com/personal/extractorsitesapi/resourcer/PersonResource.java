@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/person")
@@ -40,8 +41,9 @@ public class PersonResource {
     }
 
     @GetMapping("/{code}")
-    public Person read(@PathVariable Long code) {
-        return this.personRepository.findById(code).get();
+    public ResponseEntity<Person> read(@PathVariable Long code) {
+        Optional<Person> personOptional = this.personRepository.findById(code);
+        return personOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{code}")
@@ -54,5 +56,11 @@ public class PersonResource {
     public ResponseEntity<Person> update(@PathVariable Long code, @RequestBody @Valid Person person) {
         Person personUpdated = this.personService.update(code, person);
         return ResponseEntity.ok(personUpdated);
+    }
+
+    @PutMapping("/{code}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateActive(@PathVariable Long code, @RequestBody Boolean active) {
+        this.personService.updateActive(code, active);
     }
 }

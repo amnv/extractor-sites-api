@@ -29,4 +29,18 @@ public class PersonService {
         return this.personRepository.findById(code).get();
     }
 
+
+    public void updateActive(Long code, Boolean active) {
+        Optional<Person> personOptional = this.personRepository.findById(code);
+
+        if (!personOptional.isPresent()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+
+        Person person = personOptional.get();
+        person.setActive(active);
+        this.personRepository.save(person);
+    }
+
+
 }
