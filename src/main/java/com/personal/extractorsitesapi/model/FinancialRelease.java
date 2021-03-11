@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "financial_release")
 @Getter @Setter @NoArgsConstructor
-public class FinancialReleases {
+public class FinancialRelease {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,7 @@ public class FinancialReleases {
     private String obs;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @ManyToOne
