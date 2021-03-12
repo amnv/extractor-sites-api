@@ -1,5 +1,6 @@
 package com.personal.extractorsitesapi.exceptionHandler;
 
+import com.personal.extractorsitesapi.service.exception.PersonNotPresentOrNotActiveException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
@@ -61,6 +62,13 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler{
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,  WebRequest request) {
         String userMessage = messageSource.getMessage("message.operation_not_found", null, LocaleContextHolder.getLocale());
         String devMessage = ExceptionUtils.getRootCauseMessage(ex);
+        return handleExceptionInternal(ex, new Error(userMessage, devMessage), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(PersonNotPresentOrNotActiveException.class)
+    public ResponseEntity<Object> handlePersonNotPresentOrNotActiveException(PersonNotPresentOrNotActiveException ex,  WebRequest request) {
+        String userMessage = messageSource.getMessage("person.not_present_or_not_active", null, LocaleContextHolder.getLocale());
+        String devMessage = ex.toString();
         return handleExceptionInternal(ex, new Error(userMessage, devMessage), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
