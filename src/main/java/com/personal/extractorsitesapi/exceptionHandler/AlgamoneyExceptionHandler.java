@@ -1,9 +1,11 @@
 package com.personal.extractorsitesapi.exceptionHandler;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,13 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler{
         String userMessage = messageSource.getMessage("message.not_found", null, LocaleContextHolder.getLocale());
         String devMessage = ex.getMessage();
         return handleExceptionInternal(ex, new Error(userMessage, devMessage), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,  WebRequest request) {
+        String userMessage = messageSource.getMessage("message.operation_not_found", null, LocaleContextHolder.getLocale());
+        String devMessage = ExceptionUtils.getRootCauseMessage(ex);
+        return handleExceptionInternal(ex, new Error(userMessage, devMessage), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     public static class Error {
