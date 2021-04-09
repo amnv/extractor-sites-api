@@ -2,6 +2,7 @@ package com.personal.extractorsitesapi.resource;
 
 import com.personal.extractorsitesapi.event.ResourceBuildEvent;
 import com.personal.extractorsitesapi.model.FinancialRelease;
+import com.personal.extractorsitesapi.repository.filter.FinancialReleasesFilter;
 import com.personal.extractorsitesapi.service.FinancialReleaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,8 +34,8 @@ public class FinancialReleaseResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<FinancialRelease>> get() {
-        List<FinancialRelease> financialReleases = this.financialReleaseService.findAll();
+    public ResponseEntity<List<FinancialRelease>> get(FinancialReleasesFilter financialReleasesFilter) {
+        List<FinancialRelease> financialReleases = this.financialReleaseService.filter(financialReleasesFilter);
         return ResponseEntity.ok(financialReleases);
     }
 

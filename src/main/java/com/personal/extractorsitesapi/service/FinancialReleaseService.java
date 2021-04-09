@@ -4,6 +4,7 @@ import com.personal.extractorsitesapi.model.FinancialRelease;
 import com.personal.extractorsitesapi.model.Person;
 import com.personal.extractorsitesapi.repository.FinancialReleaseRepository;
 import com.personal.extractorsitesapi.repository.PersonRepository;
+import com.personal.extractorsitesapi.repository.filter.FinancialReleasesFilter;
 import com.personal.extractorsitesapi.service.exception.PersonNotPresentOrNotActiveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,4 +41,7 @@ public class FinancialReleaseService {
         throw new EmptyResultDataAccessException(1);
     }
 
+    public List<FinancialRelease> filter(FinancialReleasesFilter financialReleasesFilter) {
+        return this.financialReleaseRepository.filter(financialReleasesFilter);
+    }
 }
